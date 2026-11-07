@@ -2,25 +2,9 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-<button class="theme-toggle" type="button" @onclick="ToggleTheme">
-    <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-soft text-accent">
-        @switch (ThemeService.Preference)
-        {
-            case ThemePreference.Light:
-                <span>LM</span>
-                break;
-            case ThemePreference.Dark:
-                <span>DK</span>
-                break;
-            default:
-                <span>SY</span>
-                break;
-        }
-    </span>
-    <span class="text-left">
-        <span class="block text-xs uppercase tracking-[0.3em] text-muted">Theme</span>
-        <span class="block text-sm font-semibold">@Label</span>
-    </span>
+<button class="theme-toggle" type="button" @onclick="ToggleTheme" aria-label="@($"Change theme, current setting: {Label}")" title="@Label">
+    <span aria-hidden="true">@(ThemeService.Preference switch { ThemePreference.Light => "☼", ThemePreference.Dark => "☾", _ => "◐" })</span>
+    <span class="sr-only">@Label</span>
 </button>
 
 @code {

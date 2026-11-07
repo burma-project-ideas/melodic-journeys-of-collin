@@ -5,59 +5,17 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JsRuntime
 
-<div class="page-shell flex min-h-screen bg-[var(--bg)] font-sans">
-    <NavSidebar IsMobileMenuOpen="IsMobileNavOpen" OnNavigate="CloseMobileNav" />
-
-    @if (IsMobileNavOpen)
-    {
-        <button class="fixed inset-0 z-40 bg-black/45 md:hidden" type="button" @onclick="CloseMobileNav" aria-label="Close navigation menu"></button>
-    }
-
-    <div class="flex min-h-screen flex-1 flex-col pl-0 md:pl-20">
-        <header class="space-y-4 px-4 pb-2 pt-4 md:px-8 md:pt-6">
-            <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                <div class="flex items-center gap-4 xl:flex-1">
-                    <button class="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-black bg-[var(--bg)] text-[var(--fg)] md:hidden dark:border-white" type="button" @onclick="ToggleMobileNav" aria-label="Toggle navigation menu" aria-expanded="@IsMobileNavOpen" aria-controls="app-sidebar">
-                        @if (IsMobileNavOpen)
-                        {
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 1 0-1.4 1.4L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z" /></svg>
-                        }
-                        else
-                        {
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M4 7a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Zm0 5a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Zm1 4a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2H5Z" /></svg>
-                        }
-                    </button>
-                    <BrandLogo Size="56" ClassName="shadow-[4px_4px_0_0_rgba(0,0,0,0.9)]" />
-                    <div>
-                        <div class="headline-display text-4xl text-[var(--fg)]">Collin</div>
-                        <div class="text-xs uppercase tracking-[0.35em] text-muted">Melodic Journeys Radio</div>
-                    </div>
-                </div>
-
-                <div class="relative xl:w-full xl:max-w-xl">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5"><path fill="currentColor" d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5l-1.5 1.5l-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16A6.5 6.5 0 0 1 3 9.5A6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14S14 12 14 9.5S12 5 9.5 5Z"/></svg>
-                    </span>
-                    <input type="text" placeholder="Search songs, artists, albums" class="h-12 w-full rounded-full border-2 border-black bg-[var(--bg-elevated)] pl-12 pr-4 text-sm outline-none focus:ring-2 focus:ring-[var(--accent)] dark:border-white" />
-                </div>
-
-                <div class="flex items-center gap-3 xl:flex-1 xl:justify-end">
-                    <div class="hidden rounded-full border-2 border-black bg-[var(--bg)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted dark:border-white md:inline-flex">@LibraryState.Albums.Count albums</div>
-                    <ThemeToggle />
-                </div>
-            </div>
-
-            @if (!IsDjRoute)
-            {
-                <TopPlayerBar />
-            }
-        </header>
-
-        <main class="flex-1 overflow-auto px-4 pb-10 pt-4 md:px-8 md:pb-12 md:pt-6">
-            @Body
-        </main>
-    </div>
-
+<div class="page-shell collin-shell">
+    <a class="collin-skip" href="#main-content">Skip to music</a>
+    <div class="radio-banner"><span class="live-dot"></span> INDEPENDENT SOUND. ENDLESS DISCOVERY. <a href="/releases">Explore the collection <span aria-hidden="true">↗</span></a></div>
+    <header class="collin-header">
+        <a class="collin-brand" href="/" aria-label="Collin Radio home"><BrandLogo Size="34" /><span>collin<span class="brand-period">.</span></span><small>RADIO</small></a>
+        <NavSidebar IsMobileMenuOpen="IsMobileNavOpen" OnNavigate="CloseMobileNav" />
+        <div class="header-actions"><ThemeToggle /><a class="modern-button primary header-dj" href="/dj">Enter DJ Room <span aria-hidden="true">↗</span></a><button class="mobile-menu-button" type="button" @onclick="ToggleMobileNav" aria-label="Toggle navigation menu" aria-expanded="@IsMobileNavOpen" aria-controls="app-sidebar">@(IsMobileNavOpen ? "×" : "☰")</button></div>
+    </header>
+    <main id="main-content" class="collin-content">@Body</main>
+    <footer class="collin-footer"><a href="/" class="collin-brand"><BrandLogo Size="28" /><span>collin.</span></a><p>Good music. No distractions.</p><div><a href="/about-us">About the journey</a><a href="/profile">Your profile</a></div></footer>
+    @if (!IsDjRoute) { <div class="player-dock"><TopPlayerBar /></div> }
     <GlobalAudioHost />
 </div>
 
