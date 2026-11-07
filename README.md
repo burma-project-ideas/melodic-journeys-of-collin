@@ -1,53 +1,52 @@
-# 🏴‍☠️ Melodic Journeys Of Collin
+# Melodic Journeys of Collin
 
-A retro-styled, pixel-inspired music experience themed after **Monkey D. Luffy**. This application reimagines a modern music player through the lens of 90s aesthetics and vibrant colors, built on the power of **Blazor WebAssembly**.
+A Blazor WebAssembly music library with a persistent player and a dedicated DJ Room.
 
-![Project Logo](BlazorWasm.MelodicJourneysOfCollin/wwwroot/favicon.svg)
+<p align="center">
+  <img src="BlazorWasm.MelodicJourneysOfCollin/wwwroot/logo.svg" alt="Collin Radio turntable logo" width="96" height="96" />
+</p>
 
-## 🌟 Key Features
+Live app: [burma-collin.vercel.app](https://burma-collin.vercel.app/)
 
-### 🎮 Retro UI/UX Overhaul
-- **Sidebar-Centric Layout**: A fixed left-hand navigation sidebar for an immersive, console-like feel.
-- **Chunky Esthetics**: Sharp borders, heavy offset shadows, and pixelated typography inspired by classic "2D" interfaces.
-- **Glassmorphism & Texture**: Subtle micro-textures and glass-like panels that blend retro vibes with modern depth.
+## Design
 
-### 👒 Luffy Theme
-- **Custom Color Palette**: Specifically curated HSL variables representing the iconic Straw Hat captain—Vibrant Red (`--accent`), Sand/Straw (`--bg`), and Deep Shadow tones.
-- **Dynamic Theming**: Support for both Light and Dark modes, each carefully adjusted to maintain the retro-pixel aesthetic.
+The interface adapts the visual language of [PrebuiltUI](https://prebuiltui.com/): a subtle grid, generous whitespace, bold Inter typography, pill buttons, thin borders, and a pink-to-gold headline. Album artwork and a floating player keep the experience focused on music.
 
-### 💿 Immersive Music Experience
-- **Retro Vinyl Player**: A dedicated home page component featuring a spinning record, animated tonearm, and pixelated progress bars.
-- **DJ Deck Integration**: Custom-built DJ Deck icons and a dedicated "DJ Room" route for a full-screen mixing experience.
-- **Global Audio Host**: Persistent playback across navigation, ensuring your journey never misses a beat.
+- Responsive desktop navigation and mobile menu.
+- Light, dark, and system themes.
+- Search across tracks, artists, genres, and collections.
+- Persistent playback, queue selection, seeking, volume, and saved favorites.
+- Shared styling across releases, albums, favorites, profile, and DJ Room.
 
-## 🛠️ Technology Stack
+## Screenshots
 
-- **Framework**: [Blazor WebAssembly](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) (.NET 8/9+)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with native HSL variable integration.
-- **Typography**: 
-  - `VT323`: Pixel-art display font for headings and UI markers.
-  - `DM Sans`: Modern sans-serif for high readability in content.
-- **State Management**: Service-based architecture for `PlayerState`, `LibraryState`, and `ThemeService`.
+Captured from the [live app](https://burma-collin.vercel.app/).
 
-## 🚀 Getting Started
+### Light theme
 
-### Prerequisites
-- [.NET SDK](https://dotnet.microsoft.com/download) (Version 8.0 or later)
-- [Node.js](https://nodejs.org/) (For Tailwind CSS build processes)
+![Collin Radio light theme with gradient headline and floating music player](screenshots/home-light.jpg)
 
-### Running Locally
-1. Clone the repository.
-2. Navigate to the project directory:
-   ```bash
-   cd BlazorWasm.MelodicJourneysOfCollin
-   ```
-3. Restore dependencies and run:
-   ```bash
-   dotnet watch run
-   ```
+### Dark theme
 
-## 🎨 Visual Identity
-The project uses a custom-designed **DJ Deck SVG** as its primary logo, symbolizing the fusion of classic music culture and modern web tech.
+![Collin Radio dark theme with the new turntable logo and music player](screenshots/home-dark.jpg)
 
----
-*Built with ❤️ and a bit of Pirate Spirit.*
+## Run locally
+
+Requires the .NET 8 SDK and Node.js for rebuilding styles. From the repository root:
+
+```powershell
+npm ci
+npm run build:css
+dotnet run --project BlazorWasm.MelodicJourneysOfCollin/BlazorWasm.MelodicJourneysOfCollin.csproj --launch-profile http
+```
+
+Open the localhost URL printed by the server (currently `http://localhost:5182`).
+
+## Build
+
+```powershell
+npm run build:css
+dotnet build BlazorWasm.MelodicJourneysOfCollin/BlazorWasm.MelodicJourneysOfCollin.csproj
+```
+
+Styles originate in `Styles/app.css` and `Styles/modern.css`; `wwwroot/css/site.css` is generated. Inter is self-hosted with its license in `wwwroot/fonts/Inter-LICENSE`. The existing DJ deck logo, music catalog, and audio services are retained. Audio availability depends on the existing remote sources.
