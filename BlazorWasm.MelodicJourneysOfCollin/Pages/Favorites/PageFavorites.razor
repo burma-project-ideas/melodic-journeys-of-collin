@@ -1,29 +1,43 @@
 @page "/favorites"
 @inject LibraryStateService LibraryState
+@implements IDisposable
 
-@{
-    var favorites = LibraryState.GetFavorites();
-}
+@{ var favorites = LibraryState.GetFavorites(); }
 
-<div class="space-y-8 md:space-y-10">
-    <section class="surface-panel rounded-[2rem] p-6 md:p-8">
-        <SectionHeader Eyebrow="Saved Library" Title="Favorites" Description="Tracks you heart anywhere in the app are saved in this browser and ready to play again here." />
-    </section>
-
+<div class="favorites-room">
+    <header class="dj-heading">
+        <div><span class="modern-eyebrow">COLLIN RADIO / YOUR LIBRARY</span><h1>The sounds <em>you come back to.</em></h1><p>Your favorite tracks, always close. Saved in this browser.</p></div>
+        <a class="modern-button secondary" href="/releases">Discover more sounds ↗</a>
+    </header>
+    <div class="albums-summary"><span role="status">@favorites.Count saved track@(favorites.Count == 1 ? string.Empty : "s")</span><span>A little collection, all your own</span></div>
     @if (favorites.Count == 0)
     {
-        <section class="surface-panel rounded-[2rem] p-8 text-center">
-            <div class="headline-display text-5xl text-[var(--fg)]">No favorites yet</div>
-            <p class="mt-4 text-sm leading-7 text-muted">Tap the heart on releases, albums, or the player bar to build your quick-access set.</p>
+        <section class="favorites-empty" aria-labelledby="favorites-empty-title">
+            <div class="favorites-art" aria-hidden="true"><div class="favorites-record"><span>♡</span></div><span class="favorites-heart">♥</span></div>
+            <span class="modern-eyebrow">MAKE ROOM FOR YOUR FAVORITES</span>
+            <h2 id="favorites-empty-title">Your next favorite is out there.</h2>
+            <p>Tap the heart on a track or in the player.<br />The sounds you love will be waiting right here.</p>
+            <a class="modern-button favorites-browse" href="/releases">Browse releases <span aria-hidden="true">↗</span></a>
+            <span class="favorites-note">Saved on this device · No account needed</span>
         </section>
     }
     else
     {
-        <section class="grid gap-4 xl:grid-cols-2">
+        <section class="releases-grid" aria-label="Favorite tracks">
             @foreach (var track in favorites)
             {
-                <TrackCard Track="track" />
+                <div class="release-item">
+                    <TrackCard Track="track" />
+                    @if (!string.IsNullOrWhiteSpace(track.AlbumId)) { <a class="release-collection" href="@($"/albums/{track.AlbumId}")">@track.AlbumTitle <span aria-hidden="true">↗</span></a> }
+                </div>
             }
         </section>
+        <aside class="albums-invitation"><div><span class="modern-eyebrow">STAY A LITTLE LONGER</span><h2>Good music deserves a session.</h2><p>Keep listening with the turntable and your queue in the DJ Room.</p></div><a class="modern-button secondary" href="/dj">Open the DJ Room ↗</a></aside>
     }
 </div>
+
+@code {
+    protected override void OnInitialized() => LibraryState.Changed += RefreshFavorites;
+    private void RefreshFavorites() => InvokeAsync(StateHasChanged);
+    public void Dispose() => LibraryState.Changed -= RefreshFavorites;
+}

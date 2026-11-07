@@ -48,6 +48,12 @@ Searchable track cards match Albums and the DJ Room, with favorites, playback, a
 
 ![Redesigned Collin Releases page](screenshots/releases.jpg)
 
+### Favorites
+
+Saved tracks share the Releases cards. A new empty state links to discovery, and removing favorites updates the library immediately.
+
+![Redesigned Collin Favorites page](screenshots/favorites.jpg)
+
 ## Run locally
 
 Requires the .NET 8 SDK and Node.js for rebuilding styles. From the repository root:
