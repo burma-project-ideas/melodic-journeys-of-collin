@@ -30,6 +30,12 @@ Captured from the [live app](https://burma-collin.vercel.app/).
 
 ![Collin Radio dark theme with the new turntable logo and music player](screenshots/home-dark.jpg)
 
+### DJ Room
+
+A dedicated turntable, playback controls, readable session queue, and collection shortcuts.
+
+![Redesigned Collin DJ Room](screenshots/dj-room.jpg)
+
 ## Run locally
 
 Requires the .NET 8 SDK and Node.js for rebuilding styles. From the repository root:
