@@ -370,3 +370,5 @@ skills-lock.json
 docs/
 
 .superpowers/
+.vercel/
+.vercel
