@@ -36,6 +36,12 @@ A dedicated turntable, playback controls, readable session queue, and collection
 
 ![Redesigned Collin DJ Room](screenshots/dj-room.jpg)
 
+### Albums
+
+Collections use the DJ Room typography, artwork cards, and direct playback controls.
+
+![Redesigned Collin Albums page](screenshots/albums.jpg)
+
 ## Run locally
 
 Requires the .NET 8 SDK and Node.js for rebuilding styles. From the repository root:
