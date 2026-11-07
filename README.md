@@ -42,6 +42,12 @@ Collections use the DJ Room typography, artwork cards, and direct playback contr
 
 ![Redesigned Collin Albums page](screenshots/albums.jpg)
 
+### Releases
+
+Searchable track cards match Albums and the DJ Room, with favorites, playback, and collection links.
+
+![Redesigned Collin Releases page](screenshots/releases.jpg)
+
 ## Run locally
 
 Requires the .NET 8 SDK and Node.js for rebuilding styles. From the repository root:

@@ -1,55 +1,33 @@
 @page "/releases"
 @page "/releasesNew"
-@inject PlayerStateService PlayerState
 @inject LibraryStateService LibraryState
 
-@{
-    var tracks = FilteredTracks().ToList();
-}
+@{ var tracks = FilteredTracks().ToList(); }
 
-<div class="space-y-8 md:space-y-10">
-    <section class="surface-panel rounded-[2rem] p-6 md:p-8">
-        <SectionHeader Eyebrow="Discography" Title="Release crate" Description="Every local release is playable from here, and each one can be favorited or opened through its album grouping.">
-            <Actions>
-                <div class="rounded-full border-2 border-black px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-muted dark:border-white">@tracks.Count track@(tracks.Count == 1 ? string.Empty : "s")</div>
-            </Actions>
-        </SectionHeader>
-
-        <div class="mt-8 grid gap-4 md:grid-cols-[1fr_auto]">
-            <label class="flex items-center gap-3 rounded-full border-2 border-black bg-[var(--bg)] px-4 py-3 dark:border-white">
-                <span class="text-xs uppercase tracking-[0.35em] text-muted">Search</span>
-                <input class="w-full bg-transparent text-sm outline-none placeholder:text-muted" placeholder="Track, artist, or album" @bind="SearchTerm" @bind:event="oninput" />
-            </label>
-            <button class="rounded-full border-2 border-black px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] transition hover:bg-accent-soft dark:border-white" type="button" @onclick="ClearSearch">Clear</button>
-        </div>
-    </section>
-
-    <section class="grid gap-4 xl:grid-cols-2">
+<div class="releases-room">
+    <header class="dj-heading">
+        <div><span class="modern-eyebrow">COLLIN RADIO / DISCOGRAPHY</span><h1>Good sounds. <em>All in one place.</em></h1><p>Explore the releases, save a favorite, and find your next repeat.</p></div>
+        <a class="modern-button secondary" href="/albums">Explore collections ↗</a>
+    </header>
+    <div class="releases-toolbar">
+        <label class="releases-search"><span aria-hidden="true">⌕</span><input type="search" aria-label="Search releases" placeholder="Search tracks, artists, or collections" @bind="SearchTerm" @bind:event="oninput" /></label>
+        <button type="button" class="releases-clear" @onclick="ClearSearch" disabled="@(string.IsNullOrEmpty(SearchTerm))">Clear search</button>
+        <span class="releases-count" role="status">@tracks.Count track@(tracks.Count == 1 ? string.Empty : "s")</span>
+    </div>
+    <section class="releases-grid" aria-label="Releases">
         @foreach (var track in tracks)
         {
-            <div class="surface-panel rounded-[1.75rem] p-5">
-                <div class="flex flex-col gap-5 md:flex-row md:items-center">
-                    <img src="@track.Cover" alt="@track.Name" class="h-24 w-24 rounded-[1.5rem] border-2 border-black object-cover dark:border-white" />
-                    <div class="min-w-0 flex-1">
-                        <div class="flex flex-wrap items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.35em] text-muted">
-                            <span>@track.Genre</span>
-                            <span class="h-1 w-1 rounded-full bg-[var(--accent)]"></span>
-                            <span>@track.Length</span>
-                            <span class="h-1 w-1 rounded-full bg-[var(--accent)]"></span>
-                            <span>@track.AlbumTitle</span>
-                        </div>
-                        <h3 class="mt-3 font-display text-4xl text-[var(--fg)]">@DisplayName(track)</h3>
-                        <p class="mt-2 text-sm text-muted">@track.Artists</p>
-                        <p class="mt-3 text-sm leading-7 text-muted">Launch this track instantly, save it to favorites, or jump into its album collection without breaking playback.</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <FavoriteButton Track="track" />
-                        <button class="rounded-full border-2 border-black bg-[var(--accent)] px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow-[4px_4px_0_0_rgba(0,0,0,0.9)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none dark:border-white" type="button" @onclick="() => PlayerState.PlayTrack(track)">Play</button>
-                    </div>
-                </div>
+            <div class="release-item">
+                <TrackCard Track="track" />
+                @if (!string.IsNullOrWhiteSpace(track.AlbumId)) { <a class="release-collection" href="@($"/albums/{track.AlbumId}")">@track.AlbumTitle <span aria-hidden="true">↗</span></a> }
             </div>
         }
     </section>
+    @if (tracks.Count == 0)
+    {
+        <div class="releases-empty"><span class="modern-eyebrow">NOTHING IN THIS CRATE</span><h2>No releases found.</h2><p>Try another track, artist, genre, or collection.</p><button type="button" class="modern-button secondary" @onclick="ClearSearch">Show all releases</button></div>
+    }
+    <aside class="albums-invitation"><div><span class="modern-eyebrow">KEEP THE SESSION GOING</span><h2>Take your favorites to the deck.</h2><p>Your music stays with you as you explore the DJ Room.</p></div><a class="modern-button secondary" href="/dj">Open the DJ Room ↗</a></aside>
 </div>
 
 @code {
@@ -69,8 +47,6 @@
             (track.Genre?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
             (track.AlbumTitle?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false));
     }
-
-    private static string DisplayName(MusicInfoModel track) => (track.Name ?? string.Empty).Replace(".mp3", string.Empty, StringComparison.OrdinalIgnoreCase);
 
     private void ClearSearch() => SearchTerm = string.Empty;
 }
